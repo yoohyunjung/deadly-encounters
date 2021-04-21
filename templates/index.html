@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+    <head>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link rel="stylesheet" href="{{ url_for("static", filename="style.css") }}" media="1" type="text/css">
+      <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css">
+      <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    </head>
+    <body>
+        <nav>
+            <a href="https://www.civilbeat.org/">
+                <img src="{{ url_for('static', filename='cblogo-small.png') }}">
+            </a>
+        </nav>
+        <header>
+            <h1>Deadly Encounters with Honolulu Police</h1>
+            <div class="byline">
+                By <a href="https://www.civilbeat.org/author/yjung/">Yoohyun Jung</a>
+            </div>
+        </header>
+        <div id="map" style="width:100%; height:400px;"></div>
+        <table border=1 cellpadding=7>
+          <tr>
+              <th>Year</th>
+              <th>Name</th>
+              <th>Race</th>
+              <th>Ethnicity (if known)</th>
+              <th>Incident area</th>
+              <th>Age</th>
+              <th>Cause of death</th>
+              <th>Armed</th>
+              <th>Alleged threat</th>
+              <th>Alleged reason for encounter</th>
+            </tr>
+      {% for obj in object_list %}
+          <tr>
+              <td>{{ obj.year }}</td>
+              <td><a href="{{ obj.id }}/">{{ obj.name }}</a></td>
+              <td>{{ obj.race }}</td>
+              <td>{{ obj.ethnicity }}</td>
+              <td>{{ obj.incident_location}}
+              <td>{{ obj.age }}</td>
+              <td>{{ obj.cause_of_death }}</td>
+              <td>{{ obj.armed }}</td>
+              <td>{{ obj.threat }}</td>
+              <td>{{ obj.reason }}</td>
+          </tr>
+      {% endfor %}
+      </table>
+      <script type="text/javascript">
+          var map = L.map('map').setView([21.447, -158.023], 10);
+          var osmLayer = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+              maxZoom: 18,
+              attribution: 'Civil Beat Analysis'
+          });
+          map.addLayer(osmLayer);
+          var data = {
+            "type": "FeatureCollection",
+            "features": [
+              {% for obj in object_list %}
+              {
+                "type": "Feature",
+                "properties": {
+                  "name": "{{ obj.name }}",
+                },
+                "geometry": {
+                  "type": "Point",
+                  "coordinates": [{{ obj.lng }}, {{ obj.lat }}]
+                   }
+              }{% if not loop.last %},{% endif %}
+              {% endfor %}
+            ]
+        };
+          var blackIcon = L.Icon.extend({
+                  options: {
+                      iconUrl: "{{ url_for('static', filename='marker-24.png') }}",
+                      iconSize: [24, 24]
+                    }
+          });
+          var dataLayer = L.geoJson(data, {
+              pointToLayer: function (feature, latlng) {
+                    return L.marker(latlng, {icon: new blackIcon()});
+                  },
+                  onEachFeature: function(feature, layer) {
+                  layer.bindPopup(
+                      '<a href="' + feature.properties.name + '/">' +
+                      '</a>'
+                  );
+              }
+          });
+          map.addLayer(dataLayer);
+      </script>
+    </body>
+</html>
