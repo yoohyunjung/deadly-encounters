@@ -3,8 +3,9 @@
     <head>
       <meta name="viewport" content="width=device-width, initial-scale=1.0" charset="UTF=8">
       <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
-      <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css">
-      <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+      <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
+      <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
+      <link rel="stylesheet" href="/node_modules/leaflet-default-compatibility/dist/leaflet-default-compability.css" />
       <title>Honolulu Police Deadly Encounters</title>
     </head>
     <body>
@@ -14,13 +15,14 @@
             </a>
         </nav>
         <header>
-            <h1>Deadly Encounters with Honolulu Police</h1>
+            <h1>Honolulu Police Deadly Encounters</h1>
+            <caption>Analysis between 2010 to present</caption>
             <div class="byline">
                 By <a href="https://www.civilbeat.org/author/yjung/">Yoohyun Jung</a>
             </div>
         </header>
         <div id="map" style="width:100%; height:400px;"></div>
-        <table>
+        <table border=1 cellpadding=7 border-style=groove>
           <tr>
               <th>Year</th>
               <th>Name</th>
@@ -49,7 +51,7 @@
     {% endfor %}
       </table>
       <script type="text/javascript">
-      var map = L.map('map').setView([21.447, -158.023], 10);
+      var map = L.map('map').setView([21.447, -158.023], 11);
       var osmLayer = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       	maxZoom: 18,
       	attribution: 'Civil Beat Analysis'
@@ -58,16 +60,16 @@
             var data = {
               "type": "FeatureCollection",
               "features": [
-                {% for obj in object_list %}
+                {% for object in object_list %}
                 {
                   "type": "Feature",
                   "properties": {
-                    "full_name": "{{ obj.full_name }}",
-                    "id": "{{ obj.id }}"
+                    "full_name": "{{ object.name }}",
+                    "id": "{{ object.id }}"
                   },
                   "geometry": {
                     "type": "Point",
-                    "coordinates": [{{ obj.x }}, {{ obj.y }}]
+                    "coordinates": [{{ object.lon }}, {{ object.lat }}]
                   }
                 }{% if not loop.last %},{% endif %}
                 {% endfor %}
@@ -83,7 +85,7 @@
       	pointToLayer: function(feature, latlng) {
       		return L.marker(latlng, {
       			icon: new blackIcon()
-      		});
+      		})
       	},
       	onEachFeature: function(feature, layer) {
       		layer.bindPopup(
