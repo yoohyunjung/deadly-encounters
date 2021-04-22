@@ -69,7 +69,11 @@
                   },
                   "geometry": {
                     "type": "Point",
-                    "coordinates": [{{ object.lon }}, {{ object.lat }}]
+                    "coordinates": {% if object.lng == "" %}
+                        [0, 0]
+                      {% else %}
+                        [{{ object.lng }}, {{ object.lat }}]
+                      {% endif %}
                   }
                 }{% if not loop.last %},{% endif %}
                 {% endfor %}
@@ -77,7 +81,7 @@
             };
       var blackIcon = L.Icon.extend({
       	options: {
-      		iconUrl: "{{ url_for('static', filename='marker-24.svg') }}",
+      		iconUrl: "{{ url_for('static', filename='marker-15.svg') }}",
       		iconSize: [24, 24]
       	}
       });
