@@ -19,7 +19,8 @@
           <h3>{{ object.incident_location }}, {{ object.year }}</h3>
         {{ object.narrative }} <p>
         Perceived threat: {{ object.threat }} <p>
-        Reason for police encounter: {{ object.reason }}
+        Reason for police encounter: {{ object.reason }} <p>
+        <b>Have more information? Please contact the <a href="mailto:news@civilbeat.org">newsroom</a>.</b>
       </header>
       <script type="text/javascript">
             var map = L.map('map').setView([{{ object.lat }}, {{ object.lng }}], 16);
@@ -36,6 +37,5 @@
             });
             var marker = L.marker([{{ object.lat }}, {{ object.lng }}], {icon: new blackIcon()}).addTo(map);
         </script>
-
     </body>
 </html>

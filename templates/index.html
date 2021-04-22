@@ -5,6 +5,8 @@
       <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
       <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
       <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+      <link rel="stylesheet" href="static/sortable-theme-minimal.css" />
+      <script src="static/sortable.min.js"></script>
       <title>Honolulu Police Deadly Encounters</title>
     </head>
     <body>
@@ -14,17 +16,17 @@
             </a>
         </nav>
         <header>
-            <h1>Honolulu Police Deadly Encounters</h1>
-            <caption>Analysis between 2010 to present</caption>
+            <h1>Honolulu Police Deadly Encounters xx</h1>
+            <caption>Analysis between 2010 to present xx</caption>
             <div class="byline">
                 By <a href="https://www.civilbeat.org/author/yjung/">Yoohyun Jung</a>
             </div>
         </header>
         <div id="map" style="width:100%; height:400px;"></div>
-        <table class="sortable" border=1 cellpadding=7 border-style=groove>
+        <table class ="sortable-theme-minimal" data-sortable border=1 cellpadding=7 border-style=groove>
           <thead>
             <tr>
-                  <th onclick="sortTable(0)">Year</th>
+                  <th>Year</th>
                   <th>Name</th>
                   <th>Race</th>
                   <th>Ethnicity (if known)</th>
@@ -37,6 +39,7 @@
               </tr>
           </thead>
       {% for obj in object_list %}
+          <tbody>
               <tr>
                   <td>{{ obj.year }}</td>
                   <td><a href="{{ obj.id }}/">{{ obj.name }}</a></td>
@@ -49,6 +52,7 @@
                   <td>{{ obj.threat }}</td>
                   <td>{{ obj.reason }}</td>
               </tr>
+          </tbody>
       {% endfor %}
       </table>
       <script type="text/javascript">
