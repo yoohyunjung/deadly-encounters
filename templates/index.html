@@ -3,9 +3,8 @@
     <head>
       <meta name="viewport" content="width=device-width, initial-scale=1.0" charset="UTF=8">
       <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
-      <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
-      <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
-      <link rel="stylesheet" href="/node_modules/leaflet-default-compatibility/dist/leaflet-default-compability.css" />
+      <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+      <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
       <title>Honolulu Police Deadly Encounters</title>
     </head>
     <body>
@@ -57,7 +56,13 @@
       	attribution: 'Civil Beat Analysis'
       });
       map.addLayer(osmLayer);
-            var data = {
+      delete L.Icon.Default.prototype._getIconUrl;
+      L.Icon.Default.mergeOptions({
+        iconRetinaUrl: require("static/marker-15.svg"),
+        iconUrl: require("static/marker-15.svg"),
+        shadowUrl: require("static/marker-15.svg")
+      });
+      var data = {
               "type": "FeatureCollection",
               "features": [
                 {% for object in object_list %}
@@ -69,7 +74,7 @@
                   },
                   "geometry": {
                     "type": "Point",
-                    "coordinates": [{{ object.lon }}, {{ object.lat }}]
+                    "coordinates": [{{ object.lng }}, {{ object.lat }}]
                   }
                 }{% if not loop.last %},{% endif %}
                 {% endfor %}
@@ -77,13 +82,13 @@
             };
       var blackIcon = L.Icon.extend({
       	options: {
-      		iconUrl: "{{ url_for('static', filename='marker-24.svg') }}",
+      		iconUrl: "{{ url_for('static', filename='marker-15.svg') }}",
       		iconSize: [24, 24]
       	}
       });
       var dataLayer = L.geoJson(data, {
-      	pointToLayer: function(feature, latlng) {
-      		return L.marker(latlng, {
+      	pointToLayer: function(feature, latLng) {
+      		return L.marker(latLng, {
       			icon: new blackIcon()
       		})
       	},
