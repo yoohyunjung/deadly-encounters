@@ -16,15 +16,16 @@
       <div id="map" style="width:100%; height:300px;"></div>
       <header>
         <h1>{{ object.name }}</h1> <p>
+          <h3>{{ object.incident_location }}, {{ object.year }}</h3>
         {{ object.narrative }} <p>
         Perceived threat: {{ object.threat }} <p>
         Reason for police encounter: {{ object.reason }}
       </header>
-        <script type="text/javascript">
-            var map = L.map('map').setView([{{ object.lng }}, {{ object.lat }}], 16);
+      <script type="text/javascript">
+            var map = L.map('map').setView([{{ object.lat }}, {{ object.lng }}], 16);
             var osmLayer = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            	maxZoom: 18,
-            	attribution: 'Civil Beat Analysis'
+                maxZoom: 18,
+                attribution: 'Civil Beat'
             });
             map.addLayer(osmLayer);
             var blackIcon = L.Icon.extend({
@@ -33,7 +34,8 @@
                     iconSize: [24, 24]
                 }
             });
-            var marker = L.marker([{{ object.lng }}, {{ object.lat }}], {icon: new blackIcon()}).addTo(map);
+            var marker = L.marker([{{ object.lat }}, {{ object.lng }}], {icon: new blackIcon()}).addTo(map);
         </script>
+
     </body>
 </html>

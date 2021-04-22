@@ -21,47 +21,44 @@
             </div>
         </header>
         <div id="map" style="width:100%; height:400px;"></div>
-        <table border=1 cellpadding=7 border-style=groove>
-          <tr>
-              <th>Year</th>
-              <th>Name</th>
-              <th>Race</th>
-              <th>Ethnicity (if known)</th>
-              <th>Incident area</th>
-              <th>Age</th>
-              <th>Cause of death</th>
-              <th>Armed</th>
-              <th>Alleged threat</th>
-              <th>Alleged reason for encounter</th>
-          </tr>
-    {% for obj in object_list %}
-          <tr>
-              <td>{{ obj.year }}</td>
-              <td><a href="{{ obj.id }}/">{{ obj.name }}</a></td>
-              <td>{{ obj.race }}</td>
-              <td>{{ obj.ethnicity }}</td>
-              <td>{{ obj.incident_location}}
-              <td>{{ obj.age }}</td>
-              <td>{{ obj.cause_of_death }}</td>
-              <td>{{ obj.armed }}</td>
-              <td>{{ obj.threat }}</td>
-              <td>{{ obj.reason }}</td>
-          </tr>
-    {% endfor %}
+        <table class="sortable" border=1 cellpadding=7 border-style=groove>
+          <thead>
+            <tr>
+                  <th onclick="sortTable(0)">Year</th>
+                  <th>Name</th>
+                  <th>Race</th>
+                  <th>Ethnicity (if known)</th>
+                  <th>Incident area</th>
+                  <th>Age</th>
+                  <th>Cause of death</th>
+                  <th>Armed</th>
+                  <th>Alleged threat</th>
+                  <th>Alleged reason for encounter</th>
+              </tr>
+          </thead>
+      {% for obj in object_list %}
+              <tr>
+                  <td>{{ obj.year }}</td>
+                  <td><a href="{{ obj.id }}/">{{ obj.name }}</a></td>
+                  <td>{{ obj.race }}</td>
+                  <td>{{ obj.ethnicity }}</td>
+                  <td>{{ obj.incident_location}}
+                  <td>{{ obj.age }}</td>
+                  <td>{{ obj.cause_of_death }}</td>
+                  <td>{{ obj.armed }}</td>
+                  <td>{{ obj.threat }}</td>
+                  <td>{{ obj.reason }}</td>
+              </tr>
+      {% endfor %}
       </table>
       <script type="text/javascript">
-      var map = L.map('map').setView([21.447, -158.023], 11);
+      var map = L.map('map').setView([21.3069, -157.8583], 12);
       var osmLayer = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       	maxZoom: 18,
       	attribution: 'Civil Beat Analysis'
       });
       map.addLayer(osmLayer);
       delete L.Icon.Default.prototype._getIconUrl;
-      L.Icon.Default.mergeOptions({
-        iconRetinaUrl: require("static/marker-15.svg"),
-        iconUrl: require("static/marker-15.svg"),
-        shadowUrl: require("static/marker-15.svg")
-      });
       var data = {
               "type": "FeatureCollection",
               "features": [
@@ -69,7 +66,7 @@
                 {
                   "type": "Feature",
                   "properties": {
-                    "full_name": "{{ object.name }}",
+                    "name": "{{ object.name }}",
                     "id": "{{ object.id }}"
                   },
                   "geometry": {
@@ -98,9 +95,10 @@
       	},
       	onEachFeature: function(feature, layer) {
       		layer.bindPopup(
-      			'<a href="' + feature.properties.name + '/">' +
-      			'</a>'
-      		);
+            '<a href="' + feature.properties.id + '/">' +
+                            feature.properties.name +
+            '</a>'
+          );
       	}
       });
       map.addLayer(dataLayer);

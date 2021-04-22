@@ -23,9 +23,9 @@ def detail(row_id):
     template = 'detail.html'
     object_list = get_csv()
     for row in object_list:
-        if row['row_id'] == row_id:
+        if row['id'] == row_id:
             return render_template(template, object=row)
-        abort (404)
+    abort (404)
 
 if __name__ == '__main__':
     # Fire up the Flask test server
