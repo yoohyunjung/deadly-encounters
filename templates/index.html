@@ -74,7 +74,11 @@
                   },
                   "geometry": {
                     "type": "Point",
-                    "coordinates": [{{ object.lng }}, {{ object.lat }}]
+                    "coordinates": {% if object.lng == "" %}
+                        [0, 0]
+                      {% else %}
+                        [{{ object.lng }}, {{ object.lat }}]
+                      {% endif %}
                   }
                 }{% if not loop.last %},{% endif %}
                 {% endfor %}
