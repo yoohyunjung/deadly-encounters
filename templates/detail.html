@@ -18,8 +18,13 @@
         <h1>{{ object.name }}</h1> <p>
           <h3>{{ object.incident_location }}, {{ object.year }}</h3>
         {{ object.narrative }} <p>
-        Perceived threat: {{ object.threat }} <p>
-        Reason for police encounter: {{ object.reason }} <p>
+            <ul>
+              <li>Cause of death: {{ object.cause_of_death }}</li>
+              <li>Armed or unarmed: {{ object.armed }}</li>
+              <li>Perceived threat: {{ object.threat }}</li>
+              <li>Reason for police encounter: {{ object.reason }}</li>
+            </ul>
+        <a href="{{ object.links }}">Read more</a> <p>
         <b>Have more information? Please contact the <a href="mailto:news@civilbeat.org">newsroom</a>.</b>
       </header>
       <script type="text/javascript">
