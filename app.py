@@ -7,9 +7,13 @@ app.static_folder = 'static'
 
 def get_csv():
     csv_path = './static/hpd-fatal.csv'
-    csv_file = open(csv_path, 'r')
-    csv_obj = csv.DictReader(csv_file)
-    csv_list = list(csv_obj)
+    with open(csv_path, mode="rb") as stream:
+        contents = stream.read()
+        contents_utf = contents.decode('utf-8', 'ignore')
+        csv_reader = csv.DictReader(contents_utf.splitlines())
+        csv_list = list(csv_reader)
+
+    print(csv_list)
     return csv_list
 
 @app.route("/")
@@ -25,7 +29,7 @@ def detail(row_id):
     for row in object_list:
         if row['id'] == row_id:
             return render_template(template, object=row)
-    abort (404)
+        abort (404)
 
 if __name__ == '__main__':
     # Fire up the Flask test server
